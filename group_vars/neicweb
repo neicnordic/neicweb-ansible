@@ -1,0 +1,20 @@
+neicweb_production: true
+
+# Access for triggering update.
+neicweb_jekyll_update_allow:
+  - 192.30.252.0/22
+  - 130.236.101.0/25
+
+# Directories
+neicweb_top_dir: /var/www/neic.nordforsk.org
+neicweb_cgi_dir: "{{neicweb_top_dir}}/cgi-bin"
+neicweb_uploader_dir: "{{neicweb_top_dir}}/uploader"
+
+# A list of the main site (used for DocumentRoot) followed by subsites.
+neicweb_roots:
+  - vpath: /
+    base_dir: "{{neicweb_top_dir}}" # Parent of neicweb_document_root
+    cgi_key: f5d215cebaa9705f
+  - vpath: /ahm16
+    base_dir: "{{neicweb_top_dir}}/meetings/ahm16"
+    cgi_key: 990bc8f30519329a

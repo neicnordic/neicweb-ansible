@@ -1,0 +1,2 @@
+- hosts: [neicweb]
+  roles: [neicweb]

@@ -1,0 +1,69 @@
+# System
+# ======
+
+- selinux: state=disabled # TODO
+- lineinfile: dest=/etc/yum/yum-cron.conf
+              regexp='^\s*apply_updates\s*=\s*' line='apply_updates = yes'
+
+
+# Software
+# ========
+
+- yum: name={{item}} state=present
+  with_items:
+    - epel-release
+    - gcc
+    - git
+    - httpd
+    - mod_ssl
+    - mod_wsgi
+    - nodejs
+    - pandoc
+    - PyYAML
+    - ruby
+    - ruby-devel
+    - rubygem-json
+    - rubygem-ffi
+    - rubygem-safe_yaml
+    - yum-cron
+
+- gem: name={{item}} state=present
+  with_items:
+    - redcarpet
+    - RedCloth
+    - pandoc-ruby
+
+- gem: name=jekyll state=present version=2.5.3
+
+
+# Configure httpd
+# ===============
+
+- file: dest=/etc/httpd/conf.d/welcome.conf state=absent
+- file: dest=/etc/httpd/conf.d/userdir.conf state=absent
+
+- file: dest={{item.base_dir}}/html state=directory recurse=yes
+  with_items: neicweb_roots
+
+- template: dest=/etc/httpd/conf.d/vhost-neic.nordforsk.org.conf
+            src=vhost-neic.nordforsk.org.conf.j2
+            owner=root group=root mode=644
+  notify: [reload httpd]
+
+
+# Services and Firewall
+# =====================
+
+- service: name=httpd enabled=yes state=started
+- service: name=firewalld enabled=yes state=started
+
+- firewalld: service={{item}} state=enabled permanent=true
+  notify: [reload firewalld]
+  with_items: [http, https]
+
+
+# In-House Web Code
+# =================
+
+#- include: updater.yml
+#- include: uploader.yml

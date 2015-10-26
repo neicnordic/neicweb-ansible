@@ -1,0 +1,84 @@
+# {{ansible_managed}}
+
+<VirtualHost neic.nbi.dk:80>
+    ServerName neic.nbi.dk
+    DocumentRoot /var/www/html
+    Redirect permanent / https://neic.nbi.dk/
+</VirtualHost>
+
+<VirtualHost neic.nbi.dk:443>
+{% if not neicweb_production %}
+    # For debug print statements; naughty, should not be used in production.
+    WSGIRestrictStdout Off
+{% endif %}
+
+    ServerName neic.nbi.dk
+    ServerAdmin joel@nsc.liu.se
+    CustomLog logs/access_log combined
+    AddDefaultCharset UTF-8
+
+    # Redirects
+    #
+    Redirect permanent	/neic2015	https://neic2015.nordforsk.org/
+    #Redirect temp	/ngn		/lcsc2004
+
+    # Common
+    #
+    ScriptAlias /cgi-bin/ {{neicweb_cgi_dir}}/
+
+{% for r in neicweb_roots %}
+    # Configuration for {{r.vpath}}
+    #
+{% if r.vpath == '/' %}
+    DocumentRoot {{r.base_dir}}/html
+    <Directory {{r.base_dir}}/html>
+	AllowOverride none
+	Require all granted
+    </Directory>
+    Alias /server-status/ {{r.base_dir}}/jekyll-status/jekyllstatus.txt
+    Alias /server-status {{r.base_dir}}/jekyll-status/jekyllstatus.txt
+{% else %}
+    Alias {{r.vpath}} {{r.base_dir}}/html
+    Alias {{r.vpath}}/server-status/ {{r.base_dir}}/jekyll-status/jekyllstatus.txt
+    Alias {{r.vpath}}/server-status {{r.base_dir}}/jekyll-status/jekyllstatus.txt
+{% endif %}
+
+    <Directory {{r.base_dir}}/jekyll-status>
+	AllowOverride none
+	Require all granted
+    </Directory>
+    <Location /cgi-bin/github-jekyll-update.{{r.cgi_key}}.cgi>
+	Order Deny,Allow
+{% for ip in neicweb_jekyll_update_allow %}
+	Allow from {{ip}}
+{% endfor %}
+	Deny from all
+    </Location>
+{% endfor %}
+
+    <Location "/media/">
+	Options +Indexes
+    </Location>
+
+    # Media uploader stuff:
+    WSGIScriptAlias /int/github {{neicweb_uploader_dir}}/git/github_uploader/wsgi.py
+    WSGIDaemonProcess neic.nordforsk.org \
+	python-path={{neicweb_uploader_dir}}/git:{{neicweb_uploader_dir}}/local_settings
+    WSGIProcessGroup neic.nordforsk.org
+
+    <Location "/int/github/">
+	Require all granted
+    </Location>
+
+    <Directory "{{neicweb_uploader_dir}}/git/github_uploader/">
+	<Files "wsgi.py">
+	    Require all granted
+	</Files>
+    </Directory>
+
+    Alias "/assets/int/github/" "{{neicweb_uploader_dir}}/static/"
+    <Directory "{{neicweb_uploader_dir}}/static/">
+	Require all granted
+    </Directory>
+
+</VirtualHost>
