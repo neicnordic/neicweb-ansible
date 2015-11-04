@@ -1,0 +1,44 @@
+### Software
+
+- yum: name={{item}}
+  with_items:
+    - python-pillow
+    - python-pip
+    - python-requests
+- pip: name=django version={{django_version}}
+- git: dest={{github_uploader_source_dir}}
+       repo=https://github.com/neicnordic/github_uploader.git
+       version=multirepo
+
+### Configuration
+
+- file: dest={{github_uploader_config_dir}}
+        state=directory owner=root group=apache mode=750
+- template: dest={{github_uploader_config_dir}}/local_settings.py
+            src=local_settings.py.j2
+            owner=root group=apache mode=640
+
+### Database
+
+- file: dest={{github_uploader_data_dir}}
+        state=directory owner=apache group=apache mode=750
+
+- command: env PYTHONPATH={{github_uploader_config_dir}}
+               python manage.py migrate
+  args:
+    chdir: "{{github_uploader_source_dir}}"
+    creates: "{{github_uploader_data_dir}}/db.sqlite3"
+
+- file: dest={{github_uploader_data_dir}}/db.sqlite3
+        owner=apache group=apache mode=750
+
+### Static Directories and Templates
+
+- file: dest={{item}}
+        state=directory owner=root group=root mode=644
+  with_items: github_uploader_template_dirs + github_uploader_staticfiles_dirs
+
+- command: env PYTHONPATH={{github_uploader_config_dir}}
+               python manage.py collectstatic --noinput
+  args:
+    chdir: "{{github_uploader_source_dir}}"

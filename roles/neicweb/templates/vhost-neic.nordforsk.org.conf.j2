@@ -1,18 +1,20 @@
 # {{ansible_managed}}
 
-<VirtualHost neic.nbi.dk:80>
-    ServerName neic.nbi.dk
+<VirtualHost *:80>
+    ServerName neic.nordforsk.org
+    ServerAlias neic.nbi.dk
     DocumentRoot /var/www/html
     Redirect permanent / https://neic.nbi.dk/
 </VirtualHost>
 
-<VirtualHost neic.nbi.dk:443>
+<VirtualHost *:443>
 {% if not neicweb_production %}
     # For debug print statements; naughty, should not be used in production.
     WSGIRestrictStdout Off
 {% endif %}
 
-    ServerName neic.nbi.dk
+    ServerName neic.nordforsk.org
+    ServerAlias neic.nbi.dk
     ServerAdmin joel@nsc.liu.se
     CustomLog logs/access_log combined
     AddDefaultCharset UTF-8
@@ -60,24 +62,22 @@
 	Options +Indexes
     </Location>
 
-    # Media uploader stuff:
-    WSGIScriptAlias /int/github {{neicweb_uploader_dir}}/git/github_uploader/wsgi.py
-    WSGIDaemonProcess neic.nordforsk.org \
-	python-path={{neicweb_uploader_dir}}/git:{{neicweb_uploader_dir}}/local_settings
+    # Uploader
+    #
     WSGIProcessGroup neic.nordforsk.org
+    WSGIDaemonProcess neic.nordforsk.org \
+	python-path={{github_uploader_source_dir}}:{{github_uploader_config_dir}}
 
-    <Location "/int/github/">
-	Require all granted
-    </Location>
-
-    <Directory "{{neicweb_uploader_dir}}/git/github_uploader/">
+    WSGIScriptAlias /int/github \
+	{{github_uploader_source_dir}}/github_uploader/wsgi.py
+    <Directory "{{github_uploader_source_dir}}/github_uploader">
 	<Files "wsgi.py">
 	    Require all granted
 	</Files>
     </Directory>
 
-    Alias "/assets/int/github/" "{{neicweb_uploader_dir}}/static/"
-    <Directory "{{neicweb_uploader_dir}}/static/">
+    Alias "/static" "{{github_uploader_static_dir}}"
+    <Directory "{{github_uploader_static_dir}}">
 	Require all granted
     </Directory>
 

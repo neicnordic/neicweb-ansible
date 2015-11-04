@@ -1,0 +1,54 @@
+jekyll_version: 2.5.3
+django_version: 1.8.4
+
+neicweb_production: true
+
+# Access for triggering update.
+neicweb_jekyll_update_allow:
+  - 192.30.252.0/22
+  - 130.236.101.0/25
+
+# Directories
+neicweb_top_dir: /var/www/neic.nordforsk.org
+neicweb_cgi_dir: "{{neicweb_top_dir}}/cgi-bin"
+
+# A list of the main site (used for DocumentRoot) followed by subsites.
+neicweb_roots:
+  - vpath: /
+    base_dir: "{{neicweb_top_dir}}" # Parent of neicweb_document_root
+    cgi_key: f5d215cebaa9705f
+  - vpath: /ahm16
+    base_dir: "{{neicweb_top_dir}}/meetings/ahm16"
+    cgi_key: 990bc8f30519329a
+
+# Uploader
+#
+github_uploader_source_dir: /opt/github_uploader
+github_uploader_static_dir: /var/www/github_uploader/static
+github_uploader_media_dir: /var/www/github_uploader/media
+github_uploader_config_dir: /etc/github_uploader
+github_uploader_data_dir: /var/lib/github_uploader
+github_uploader_allowed_hosts: ['neic.nordforsk.org', 'neic.nbi.dk']
+github_uploader_admins: (('Joel', 'joel@nsc.liu.se'),)
+github_uploader_template_dirs: ['/var/www/github_uploader/reskin/templates']
+github_uploader_staticfiles_dirs: ['/var/www/github_uploader/reskin/static']
+
+github_uploader_instances:
+  neicweb:
+    full_name: neicnordic/neicweb
+    description: "NeIC official website"
+  neicweb-devel:
+    full_name: neicnordic/neicweb-devel
+    description: "Sandbox for NeIC website development"
+    media_root: /var/www/html/media/
+    media_url: https://neic.nbi.dk:59443/media/
+  ahm16:
+    full_name: neicnordic/ahm16
+    description: "NeIC all-hands meeting 2016"
+  nscweb:
+    full_name: snic-nsc/nscweb
+    description: "NSC official website"
+#    hidden: True,
+    path: assets/img
+    scope: repo
+    media_url: https://www.nsc.liu.se/assets/img/

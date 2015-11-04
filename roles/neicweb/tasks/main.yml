@@ -33,7 +33,7 @@
     - RedCloth
     - pandoc-ruby
 
-- gem: name=jekyll state=present version=2.5.3
+- gem: name=jekyll state=present version={{jekyll_version}}
 
 
 # Configure httpd
