@@ -13,13 +13,17 @@ neicweb_top_dir: /var/www/neic.nordforsk.org
 neicweb_cgi_dir: "{{neicweb_top_dir}}/cgi-bin"
 
 # A list of the main site (used for DocumentRoot) followed by subsites.
-neicweb_roots:
-  - vpath: /
-    base_dir: "{{neicweb_top_dir}}" # Parent of neicweb_document_root
+neicweb_sites:
+  neicweb:
+    vpath: /
+    webroot: "{{neicweb_top_dir}}/neicweb" # Parent of neicweb_document_root
     cgi_key: f5d215cebaa9705f
-  - vpath: /ahm16
-    base_dir: "{{neicweb_top_dir}}/meetings/ahm16"
+    git_fetch_url: https://github.com/neicnordic/neicweb.git
+  ahm16:
+    vpath: /ahm16
+    webroot: "{{neicweb_top_dir}}/ahm16"
     cgi_key: 990bc8f30519329a
+    git_fetch_url: https://github.com/neicnordic/ahm16.git
 
 # Uploader
 #

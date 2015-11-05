@@ -18,22 +18,8 @@
     - mod_ssl
     - mod_wsgi
     - nodejs
-    - pandoc
     - PyYAML
-    - ruby
-    - ruby-devel
-    - rubygem-json
-    - rubygem-ffi
-    - rubygem-safe_yaml
     - yum-cron
-
-- gem: name={{item}} state=present
-  with_items:
-    - redcarpet
-    - RedCloth
-    - pandoc-ruby
-
-- gem: name=jekyll state=present version={{jekyll_version}}
 
 
 # Configure httpd
@@ -41,9 +27,6 @@
 
 - file: dest=/etc/httpd/conf.d/welcome.conf state=absent
 - file: dest=/etc/httpd/conf.d/userdir.conf state=absent
-
-- file: dest={{item.base_dir}}/html state=directory recurse=yes
-  with_items: neicweb_roots
 
 - template: dest=/etc/httpd/conf.d/vhost-neic.nordforsk.org.conf
             src=vhost-neic.nordforsk.org.conf.j2
@@ -60,10 +43,3 @@
 - firewalld: service={{item}} state=enabled permanent=true
   notify: [reload firewalld]
   with_items: [http, https]
-
-
-# In-House Web Code
-# =================
-
-#- include: updater.yml
-#- include: uploader.yml

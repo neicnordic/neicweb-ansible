@@ -1,2 +1,2 @@
 - hosts: [neicweb]
-  roles: [github_uploader, neicweb]
+  roles: [neicweb]

@@ -1,0 +1,11 @@
+# {{ansible_managed}}
+
+[Unit]
+Description=jekyllweb_updater daemon for {{item[0]}}
+After=network.target
+
+[Service]
+ExecStart={{jekyllweb_updater_program}} serve {{item[1].webroot}}/html
+
+[Install]
+WantedBy=multi-user.target

@@ -28,24 +28,24 @@
     #
     ScriptAlias /cgi-bin/ {{neicweb_cgi_dir}}/
 
-{% for r in neicweb_roots %}
+{% for r in neicweb_sites.values() %}
     # Configuration for {{r.vpath}}
     #
 {% if r.vpath == '/' %}
-    DocumentRoot {{r.base_dir}}/html
-    <Directory {{r.base_dir}}/html>
+    DocumentRoot {{r.webroot}}/html
+    <Directory {{r.webroot}}/html>
 	AllowOverride none
 	Require all granted
     </Directory>
-    Alias /server-status/ {{r.base_dir}}/jekyll-status/jekyllstatus.txt
-    Alias /server-status {{r.base_dir}}/jekyll-status/jekyllstatus.txt
+    Alias /server-status/ {{r.webroot}}/jekyll-status/jekyllstatus.txt
+    Alias /server-status {{r.webroot}}/jekyll-status/jekyllstatus.txt
 {% else %}
-    Alias {{r.vpath}} {{r.base_dir}}/html
-    Alias {{r.vpath}}/server-status/ {{r.base_dir}}/jekyll-status/jekyllstatus.txt
-    Alias {{r.vpath}}/server-status {{r.base_dir}}/jekyll-status/jekyllstatus.txt
+    Alias {{r.vpath}} {{r.webroot}}/html
+    Alias {{r.vpath}}/server-status/ {{r.webroot}}/jekyll-status/jekyllstatus.txt
+    Alias {{r.vpath}}/server-status {{r.webroot}}/jekyll-status/jekyllstatus.txt
 {% endif %}
 
-    <Directory {{r.base_dir}}/jekyll-status>
+    <Directory {{r.webroot}}/jekyll-status>
 	AllowOverride none
 	Require all granted
     </Directory>

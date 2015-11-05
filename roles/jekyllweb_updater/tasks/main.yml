@@ -1,0 +1,69 @@
+### System Software
+
+- yum: name={{item}} state=present
+  with_items:
+    - pandoc
+    - ruby
+    - ruby-devel
+    - rubygem-json
+    - rubygem-ffi
+    - rubygem-safe_yaml
+
+- gem: user_install=no name={{item}} state=present
+  with_items:
+    - redcarpet
+    - RedCloth
+    - pandoc-ruby
+
+- gem: user_install=no name=jekyll state=present version={{jekyll_version}}
+
+### Our Software
+
+- stat: path=external/jekyllweb_updater
+  register: judir
+- fail: msg="Please check out neic@neicgit.nsc.liu.se:joel/jekyllweb_updater.git under external."
+  when: not (judir.stat.isdir is defined && judir.stat.isdir)
+
+- copy: dest={{jekyllweb_updater_program}}
+        src=external/jekyllweb_updater/jekyllweb_updater.py
+        owner=root group=root mode=755
+
+- copy: dest={{jekyllweb_updater_ssh_wrapper}}
+        src=external/jekyllweb_updater/github_ssh_wrapper.sh
+        owner=root group=root mode=755
+
+### User
+
+- user: system=yes name={{jekyllweb_updater_user}}
+        comment="jekyllweb_updater daemon"
+
+### Directories
+
+- file: dest={{jekyllweb_updater_log_dir}} state=directory mode=750
+        owner={{jekyllweb_updater_user}} group={{jekyllweb_updater_user}}
+- file: dest={{jekyllweb_updater_status_dir}} state=directory mode=755
+        owner={{jekyllweb_updater_user}} group={{jekyllweb_updater_user}}
+
+- file: dest={{jekyllweb_updater_cache_dir}}/{{item[0]}}/{{item[1]}}
+        state=directory recurse=yes
+        owner={{jekyllweb_updater_user}} group={{jekyllweb_updater_user}} mode=750
+  with_nested:
+    - neicweb_sites.keys()
+    - [build, plugins, utils]
+
+- file: dest={{item.webroot}}/html state=directory recurse=yes
+        owner={{jekyllweb_updater_user}} group=apache mode=750
+  with_items: neicweb_sites.values()
+
+### Configuration and Service
+
+- template: dest=/etc/jekyllweb_updater.conf src=jekyllweb_updater.conf.j2
+
+- template: dest=/usr/lib/systemd/system/jekyllweb_updater_{{item[0]}}.service
+            src=jekyllweb_updater.service.j2
+            owner=root group=root mode=644
+  with_items: neicweb_sites.items()
+  notify: [reload systemd]
+
+- service: name=jekyllweb_updater_{{item}} state=running enabled=yes
+  with_items: neicweb_sites.keys()
