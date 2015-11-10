@@ -18,20 +18,28 @@
     ServerAdmin joel@nsc.liu.se
     ErrorLog logs/ssl_error_log
     CustomLog logs/ssl_access_log combined
+
+    SSLEngine on
+    SSLCertificateFile /etc/pki/tls/certs/neic.nordforsk.org.pem
+    SSLCertificateKeyFile /etc/pki/tls/private/neic.nordforsk.org-key.pem
+    SSLProtocol all -SSLv2 -SSLv3
+    SSLCipherSuite TLSv1.2:ALL:!ADH:!EXPORT:!SSLv2:RC4+RSA:+HIGH:!MEDIUM:!LOW
+
     AddDefaultCharset UTF-8
 
-    # Redirects
-    #
+    ### Redirects
+
     Redirect permanent	/neic2015	https://neic2015.nordforsk.org/
     #Redirect temp	/ngn		/lcsc2004
 
-    # Common
-    #
+    ### Common
+
     ScriptAlias /cgi-bin/ {{neicweb_cgi_dir}}/
 
 {% for r in neicweb_sites.values() %}
-    # Configuration for {{r.vpath}}
-    #
+
+    ### Configuration for {{r.vpath}}
+
 {% if r.vpath == '/' %}
     DocumentRoot {{r.webroot}}/html
     <Directory {{r.webroot}}/html>
@@ -49,6 +57,8 @@
     </Location>
 {% endfor %}
 
+    ### jekyllweb_updater Status Files
+
     Alias /int/status {{jekyllweb_updater_status_dir}}
     <Directory {{jekyllweb_updater_status_dir}}>
 	Options +Indexes
@@ -60,8 +70,8 @@
 	Options +Indexes
     </Location>
 
-    # Uploader
-    #
+    ### Uploader
+
     WSGIProcessGroup neic.nordforsk.org
     WSGIDaemonProcess neic.nordforsk.org \
 	python-path={{github_uploader_source_dir}}:{{github_uploader_config_dir}}
