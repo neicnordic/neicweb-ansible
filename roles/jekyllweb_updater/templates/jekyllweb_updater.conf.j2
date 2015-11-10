@@ -3,8 +3,8 @@
 
 [{{siteinfo.webroot}}/html]
 builddir    = {{jekyllweb_updater_cache_dir}}/{{name}}/build
-plugindir   = {{jekyllweb_updater_cache_dir}}/{{name}}/plugins
-utilsdir    = {{jekyllweb_updater_cache_dir}}/{{name}}/utils
+plugindir   = {{jekyllweb_updater_trusted_cache_dir}}/{{name}}/plugins
+utilsdir    = {{jekyllweb_updater_trusted_cache_dir}}/{{name}}/utils
 statusfile  = {{jekyllweb_updater_status_dir}}/{{name}}.txt
 gitbranch   = master
 giturl      = {{siteinfo.git_fetch_url}}

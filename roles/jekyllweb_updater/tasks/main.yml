@@ -55,6 +55,10 @@
         owner={{jekyllweb_updater_user}} group=apache mode=750
   with_items: neicweb_sites.values()
 
+- git: dest={{jekyllweb_updater_trusted_cache_dir}}
+       repo={{jekyllweb_updater_trusted_repo}}
+  when: jekyllweb_updater_trusted_repo is defined
+
 ### Configuration and Service
 
 - template: dest=/etc/jekyllweb_updater.conf src=jekyllweb_updater.conf.j2

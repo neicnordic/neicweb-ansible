@@ -2,5 +2,6 @@ jekyllweb_updater_user: mrjekyll
 jekyllweb_updater_status_dir: /var/www/jekyllweb_updater_status
 jekyllweb_updater_log_dir: /var/log/jekyllweb_updater
 jekyllweb_updater_cache_dir: /var/cache/jekyllweb_updater
+jekyllweb_updater_trusted_cache_dir: /var/cache/jekyllweb_updater_trusted
 jekyllweb_updater_program: /usr/local/bin/jekyllweb_updater
 jekyllweb_updater_ssh_wrapper: /usr/local/bin/jekyllweb_updater_ssh
