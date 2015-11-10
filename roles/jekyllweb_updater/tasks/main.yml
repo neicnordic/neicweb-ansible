@@ -32,6 +32,12 @@
         src=external/jekyllweb_updater/github_ssh_wrapper.sh
         owner=root group=root mode=755
 
+- file: dest={{neicweb_cgi_dir}} state=directory owner=root group=root mode=755
+- template: dest={{neicweb_cgi_dir}}/github-jekyll-update.{{item.cgi_key}}.cgi
+            src=github-jekyll-update.cgi.j2
+            owner=root group=root mode=755
+  with_items: neicweb_sites.values()
+
 ### User
 
 - user: system=yes name={{jekyllweb_updater_user}}
