@@ -16,7 +16,8 @@
     ServerName neic.nordforsk.org
     ServerAlias neic.nbi.dk
     ServerAdmin joel@nsc.liu.se
-    CustomLog logs/access_log combined
+    ErrorLog logs/ssl_error_log
+    CustomLog logs/ssl_access_log combined
     AddDefaultCharset UTF-8
 
     # Redirects
@@ -37,26 +38,23 @@
 	AllowOverride none
 	Require all granted
     </Directory>
-    Alias /server-status/ {{r.webroot}}/jekyll-status/jekyllstatus.txt
-    Alias /server-status {{r.webroot}}/jekyll-status/jekyllstatus.txt
 {% else %}
     Alias {{r.vpath}} {{r.webroot}}/html
-    Alias {{r.vpath}}/server-status/ {{r.webroot}}/jekyll-status/jekyllstatus.txt
-    Alias {{r.vpath}}/server-status {{r.webroot}}/jekyll-status/jekyllstatus.txt
 {% endif %}
+    <Location /cgi-bin/github-jekyll-update.{{r.cgi_key}}.cgi>
+{% for ip in neicweb_jekyll_update_allow %}
+	Require ip {{ip}}
+{% endfor %}
+	Require all denied
+    </Location>
+{% endfor %}
 
-    <Directory {{r.webroot}}/jekyll-status>
+    Alias /int/status {{jekyllweb_updater_status_dir}}
+    <Directory {{jekyllweb_updater_status_dir}}>
+	Options +Indexes
 	AllowOverride none
 	Require all granted
     </Directory>
-    <Location /cgi-bin/github-jekyll-update.{{r.cgi_key}}.cgi>
-	Order Deny,Allow
-{% for ip in neicweb_jekyll_update_allow %}
-	Allow from {{ip}}
-{% endfor %}
-	Deny from all
-    </Location>
-{% endfor %}
 
     <Location "/media/">
 	Options +Indexes
