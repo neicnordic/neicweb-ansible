@@ -1,4 +1,4 @@
-jekyllweb_updater_user: mrjekyll
+jekyllweb_updater_user: drjekyll
 jekyllweb_updater_status_dir: /var/www/jekyllweb_updater_status
 jekyllweb_updater_log_dir: /var/log/jekyllweb_updater
 jekyllweb_updater_cache_dir: /var/cache/jekyllweb_updater
