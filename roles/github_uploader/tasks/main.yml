@@ -42,3 +42,10 @@
                python manage.py collectstatic --noinput
   args:
     chdir: "{{github_uploader_source_dir}}"
+
+### Cron Job to Delete Stale Sessions
+
+- file: dest=/var/log/github_uploader state=directory
+        owner=apache group=apache mode=750
+- cron: name=github_uploader_cleanup cron_file=neicweb-ansible minute=03 user=apache
+        job="PYTHONPATH={{github_uploader_config_dir}} python {{github_uploader_source_dir}}/manage.py clearsessions_github > /var/log/github_uploader/clearsessions_github.log 2>&1"
