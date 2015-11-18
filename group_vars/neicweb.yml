@@ -19,6 +19,11 @@ neicweb_sites:
     webroot: "{{neicweb_top_dir}}/neicweb" # Parent of neicweb_document_root
     cgi_key: f5d215cebaa9705f
     git_fetch_url: https://github.com/neicnordic/neicweb.git
+  neicweb-devel:
+    vpath: /devel
+    webroot: "{{neicweb_top_dir}}/neicweb-devel"
+    cgi_key: 0e6d4351eb9f5424
+    git_fetch_url: https://github.com/neicnordic/neicweb-devel.git
   ahm16:
     vpath: /ahm16
     webroot: "{{neicweb_top_dir}}/ahm16"
@@ -42,18 +47,22 @@ github_uploader_instances:
   neicweb:
     full_name: neicnordic/neicweb
     description: "NeIC official website"
+    media_root: "{{neicweb_top_dir}}/neicweb-media"
+    media_url: https://neic.nordforsk.org/media/
   neicweb-devel:
     full_name: neicnordic/neicweb-devel
     description: "Sandbox for NeIC website development"
-    media_root: /var/www/html/media/
-#    media_url: https://neic.nbi.dk:59443/media/
+    media_root: "{{neicweb_top_dir}}/neicweb-devel-media"
+    media_url: https://neic.nordforsk.org/devel/media/
   ahm16:
     full_name: neicnordic/ahm16
     description: "NeIC all-hands meeting 2016"
-  nscweb:
-    full_name: snic-nsc/nscweb
-    description: "NSC official website"
+    media_root: "{{neicweb_top_dir}}/ahm16-media"
+    media_url: https://neic.nordforsk.org/ahm16/media/
+#  nscweb:
+#    full_name: snic-nsc/nscweb
+#    description: "NSC official website"
 #    hidden: True,
-    path: assets/img
-    scope: repo
-    media_url: https://www.nsc.liu.se/assets/img/
+#    path: assets/img
+#    scope: repo
+#    media_url: https://www.nsc.liu.se/assets/img/
