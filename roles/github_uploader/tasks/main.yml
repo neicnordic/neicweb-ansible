@@ -8,7 +8,7 @@
 - pip: name=django version={{django_version}}
 - git: dest={{github_uploader_source_dir}}
        repo=https://github.com/neicnordic/github_uploader.git
-       version=multirepo
+       version=master
 
 ### Configuration
 
