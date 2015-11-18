@@ -1,23 +1,20 @@
 # {{ansible_managed}}
 
+NameVirtualHost *:80
 <VirtualHost *:80>
     ServerName neic.nordforsk.org
     ServerAlias neic.nbi.dk
     DocumentRoot /var/www/html
-    Redirect permanent / https://neic.nbi.dk/
+    Redirect permanent / https://neic.nordforsk.org/
 </VirtualHost>
 
-<VirtualHost *:443>
-{% if not neicweb_production %}
-    # For debug print statements; naughty, should not be used in production.
-    WSGIRestrictStdout Off
-{% endif %}
-
+Listen {{ansible_default_ipv4.address}}:44301
+<VirtualHost {{ansible_fqdn}}:44301>
     ServerName neic.nordforsk.org
     ServerAlias neic.nbi.dk
     ServerAdmin joel@nsc.liu.se
-    ErrorLog logs/ssl_error_log
-    CustomLog logs/ssl_access_log combined
+    ErrorLog logs/neic.nordforsk.org/ssl_error_log
+    CustomLog logs/neic.nordforsk.org/ssl_access_log combined
 
     SSLEngine on
     SSLCertificateFile /etc/pki/tls/certs/neic.nordforsk.org.pem
@@ -69,24 +66,5 @@
     <Location "/media/">
 	Options +Indexes
     </Location>
-
-    ### Uploader
-
-    WSGIProcessGroup neic.nordforsk.org
-    WSGIDaemonProcess neic.nordforsk.org \
-	python-path={{github_uploader_source_dir}}:{{github_uploader_config_dir}}
-
-    WSGIScriptAlias /int/github \
-	{{github_uploader_source_dir}}/github_uploader/wsgi.py
-    <Directory "{{github_uploader_source_dir}}/github_uploader">
-	<Files "wsgi.py">
-	    Require all granted
-	</Files>
-    </Directory>
-
-    Alias "/static" "{{github_uploader_static_dir}}"
-    <Directory "{{github_uploader_static_dir}}">
-	Require all granted
-    </Directory>
 
 </VirtualHost>

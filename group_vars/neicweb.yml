@@ -46,7 +46,7 @@ github_uploader_instances:
     full_name: neicnordic/neicweb-devel
     description: "Sandbox for NeIC website development"
     media_root: /var/www/html/media/
-    media_url: https://neic.nbi.dk:59443/media/
+#    media_url: https://neic.nbi.dk:59443/media/
   ahm16:
     full_name: neicnordic/ahm16
     description: "NeIC all-hands meeting 2016"

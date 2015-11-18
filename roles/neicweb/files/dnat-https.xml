@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>DNATed Secure WWW (HTTPS)</short>
+  <description>
+    Port range used at NBI for HTTPS sites with DNATed IP numbers.
+  </description>
+  <port protocol="tcp" port="44300-44399"/>
+</service>
