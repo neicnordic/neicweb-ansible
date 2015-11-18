@@ -1,6 +1,5 @@
 # {{ansible_managed}}
 
-NameVirtualHost *:80
 <VirtualHost *:80>
     ServerName neic.nordforsk.org
     ServerAlias neic.nbi.dk
@@ -8,8 +7,7 @@ NameVirtualHost *:80
     Redirect permanent / https://neic.nordforsk.org/
 </VirtualHost>
 
-Listen {{ansible_default_ipv4.address}}:44301
-<VirtualHost {{ansible_fqdn}}:44301>
+<VirtualHost {{ansible_default_ipv4.address}}:443>
     ServerName neic.nordforsk.org
     ServerAlias neic.nbi.dk
     ServerAdmin joel@nsc.liu.se
@@ -66,5 +64,23 @@ Listen {{ansible_default_ipv4.address}}:44301
     <Location "/media/">
 	Options +Indexes
     </Location>
+
+    ### Uploader
+
+    WSGIProcessGroup neic.nordforsk.org
+    WSGIDaemonProcess neic.nordforsk.org \
+	python-path={{github_uploader_source_dir}}:{{github_uploader_config_dir}}
+
+    WSGIScriptAlias /int/upload {{github_uploader_source_dir}}/github_uploader/wsgi.py
+    <Directory "{{github_uploader_source_dir}}/github_uploader">
+	<Files "wsgi.py">
+	    Require all granted
+	</Files>
+    </Directory>
+
+    Alias "/static" "{{github_uploader_static_dir}}"
+    <Directory "{{github_uploader_static_dir}}">
+	Require all granted
+    </Directory>
 
 </VirtualHost>

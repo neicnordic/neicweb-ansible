@@ -40,7 +40,6 @@
   notify: [reload httpd]
   with_items:
   - neic.nordforsk.org
-  - upload.neic.nordforsk.org
 
 
 # Services and Firewall
