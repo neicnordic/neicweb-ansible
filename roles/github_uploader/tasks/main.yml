@@ -34,6 +34,10 @@
 
 ### Static Directories and Templates
 
+- file: dest={{item.media_root}}
+        state=directory owner=apache group=apache mode=644
+  with_items: github_uploader_instances.values()
+
 - file: dest={{item}}
         state=directory owner=root group=root mode=644
   with_items: github_uploader_template_dirs + github_uploader_staticfiles_dirs
