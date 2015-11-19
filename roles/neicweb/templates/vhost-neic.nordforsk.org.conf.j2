@@ -45,7 +45,7 @@
 {% else %}
     Alias {{r.vpath}} {{r.webroot}}/html
 {% endif %}
-    <Location /cgi-bin/github-jekyll-update.{{r.cgi_key}}.cgi>
+    <Location ~ /cgi-bin/github-jekyll-update\.[^/]*\.cgi$>
 {% for ip in neicweb_jekyll_update_allow %}
 	Require ip {{ip}}
 {% endfor %}
@@ -101,7 +101,8 @@
 	AllowOverride none
 	Require all granted
     </Directory>
-    <Location /cgi-bin/github-jekyll-update.{{r.cgi_key}}.cgi>
+    Alias /cgi-bin {{neicweb_cgi_dir}}
+    <Location ~ /cgi-bin/github-jekyll-update\.[^/]*\.cgi$>
 {% for ip in neicweb_jekyll_update_allow %}
 	Require ip {{ip}}
 {% endfor %}
