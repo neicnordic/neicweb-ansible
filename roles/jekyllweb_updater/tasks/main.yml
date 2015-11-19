@@ -2,6 +2,10 @@
 
 - yum: name={{item}} state=present
   with_items:
+    - epel-release
+    - gcc
+    - git
+    - httpd             # for the apache user
     - pandoc
     - ruby
     - ruby-devel

@@ -11,9 +11,6 @@
 
 - yum: name={{item}} state=present
   with_items:
-    - epel-release
-    - gcc
-    - git
     - httpd
     - mod_ssl
     - mod_wsgi
