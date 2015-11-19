@@ -15,17 +15,18 @@ neicweb_cgi_dir: "{{neicweb_top_dir}}/cgi-bin"
 # A list of the main site (used for DocumentRoot) followed by subsites.
 neicweb_sites:
   neicweb:
+    vhost: neic.nordforsk.org
     vpath: /
     webroot: "{{neicweb_top_dir}}/neicweb" # Parent of neicweb_document_root
     cgi_key: neicnordic-neicweb
     git_fetch_url: https://github.com/neicnordic/neicweb.git
   neicweb-devel:
-    vpath: /devel
+    vhost: devel.neic.nordforsk.org
     webroot: "{{neicweb_top_dir}}/neicweb-devel"
     cgi_key: neicnordic-neicweb-devel
     git_fetch_url: https://github.com/neicnordic/neicweb-devel.git
   ahm16:
-    vpath: /ahm16
+    vhost: ahm16.neic.nordforsk.org
     webroot: "{{neicweb_top_dir}}/ahm16"
     cgi_key: neicnordic-ahm16
     git_fetch_url: https://github.com/neicnordic/ahm16.git
@@ -53,12 +54,12 @@ github_uploader_instances:
     full_name: neicnordic/neicweb-devel
     description: "Sandbox for NeIC website development"
     media_root: "{{neicweb_top_dir}}/neicweb-devel-media"
-    media_url: https://neic.nordforsk.org/devel/media/
+    media_url: https://devel.neic.nordforsk.org/media/
   ahm16:
     full_name: neicnordic/ahm16
     description: "NeIC all-hands meeting 2016"
     media_root: "{{neicweb_top_dir}}/ahm16-media"
-    media_url: https://neic.nordforsk.org/ahm16/media/
+    media_url: https://ahm16.neic.nordforsk.org/media/
 #  nscweb:
 #    full_name: snic-nsc/nscweb
 #    description: "NSC official website"

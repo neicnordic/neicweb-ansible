@@ -25,11 +25,9 @@
 - file: dest=/etc/httpd/conf.d/welcome.conf state=absent
 - file: dest=/etc/httpd/conf.d/userdir.conf state=absent
 
-- file: dest=/var/log/httpd/{{item}} state=directory
+- file: dest=/var/log/httpd/{{item.vhost}} state=directory
         owner=root group=root mode=644
-  with_items:
-  - neic.nordforsk.org
-  - upload.neic.nordforsk.org
+  with_items: neicweb_sites.values()
 
 - template: dest=/etc/httpd/conf.d/vhost-{{item}}.conf
             src=vhost-{{item}}.conf.j2

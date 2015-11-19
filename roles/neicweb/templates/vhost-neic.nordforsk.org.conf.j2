@@ -32,6 +32,7 @@
     ScriptAlias /cgi-bin/ {{neicweb_cgi_dir}}/
 
 {% for r in neicweb_sites.values() %}
+{% if r.vhost == 'neic.nordforsk.org' %}
 
     ### Configuration for {{r.vpath}}
 
@@ -50,6 +51,7 @@
 {% endfor %}
 	Require all denied
     </Location>
+{% endif %}
 {% endfor %}
 
     ### jekyllweb_updater Status Files
@@ -84,3 +86,27 @@
     </Directory>
 
 </VirtualHost>
+
+{% for r in neicweb_sites.values() %}
+{% if r.vhost != 'neic.nordforsk.org' %}
+
+### Configuration for {{r.vhost}}
+
+<VirtualHost *:80>
+    ServerName {{r.vhost}}
+    DocumentRoot {{r.webroot}}/html
+    ErrorLog logs/{{r.vhost}}/ssl_error_log
+    CustomLog logs/{{r.vhost}}/ssl_access_log combined
+    <Directory {{r.webroot}}/html>
+	AllowOverride none
+	Require all granted
+    </Directory>
+    <Location /cgi-bin/github-jekyll-update.{{r.cgi_key}}.cgi>
+{% for ip in neicweb_jekyll_update_allow %}
+	Require ip {{ip}}
+{% endfor %}
+	Require all denied
+    </Location>
+</VirtualHost>
+{% endif %}
+{% endfor %}
