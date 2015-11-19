@@ -51,13 +51,13 @@
         owner={{jekyllweb_updater_user}} group={{jekyllweb_updater_user}}
 
 - file: dest={{jekyllweb_updater_cache_dir}}/{{item[0]}}/{{item[1]}}
-        state=directory recurse=yes
+        state=directory
         owner={{jekyllweb_updater_user}} group={{jekyllweb_updater_user}} mode=750
   with_nested:
     - neicweb_sites.keys()
     - [build, plugins, utils]
 
-- file: dest={{item.webroot}}/html state=directory recurse=yes
+- file: dest={{item.webroot}}/html state=directory
         owner={{jekyllweb_updater_user}} group=apache mode=750
   with_items: neicweb_sites.values()
 
