@@ -47,6 +47,8 @@
 
 - copy: dest=/etc/firewalld/services/dnat-https.xml src=dnat-https.xml
         owner=root group=root mode=644
+  notify: [restart firewalld]
+- meta: flush_handlers
 
 - firewalld: service={{item}} state=enabled permanent=true
   notify: [reload firewalld]
