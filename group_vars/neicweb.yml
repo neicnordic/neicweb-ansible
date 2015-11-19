@@ -17,17 +17,17 @@ neicweb_sites:
   neicweb:
     vpath: /
     webroot: "{{neicweb_top_dir}}/neicweb" # Parent of neicweb_document_root
-    cgi_key: f5d215cebaa9705f
+    cgi_key: 5365d2250a3b2995
     git_fetch_url: https://github.com/neicnordic/neicweb.git
   neicweb-devel:
     vpath: /devel
     webroot: "{{neicweb_top_dir}}/neicweb-devel"
-    cgi_key: 0e6d4351eb9f5424
+    cgi_key: 7d78e21a8d123112
     git_fetch_url: https://github.com/neicnordic/neicweb-devel.git
   ahm16:
     vpath: /ahm16
     webroot: "{{neicweb_top_dir}}/ahm16"
-    cgi_key: 990bc8f30519329a
+    cgi_key: 12149bedf02d0c03
     git_fetch_url: https://github.com/neicnordic/ahm16.git
 jekyllweb_updater_trusted_repo: https://github.com/neicnordic/neicweb-extensions.git
 

@@ -68,6 +68,7 @@
 ### Configuration and Service
 
 - template: dest=/etc/jekyllweb_updater.conf src=jekyllweb_updater.conf.j2
+            owner=root group=root mode=644
 
 - template: dest=/usr/lib/systemd/system/jekyllweb_updater_{{item[0]}}.service
             src=jekyllweb_updater.service.j2
