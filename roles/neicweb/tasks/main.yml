@@ -1,13 +1,11 @@
-# System
-# ======
+### System
 
 - selinux: state=disabled # TODO
 - lineinfile: dest=/etc/yum/yum-cron.conf
               regexp='^\s*apply_updates\s*=\s*' line='apply_updates = yes'
 
 
-# Software
-# ========
+### Software
 
 - yum: name={{item}} state=present
   with_items:
@@ -19,8 +17,7 @@
     - yum-cron
 
 
-# Configure httpd
-# ===============
+### Configure httpd
 
 - file: dest=/etc/httpd/conf.d/welcome.conf state=absent
 - file: dest=/etc/httpd/conf.d/userdir.conf state=absent
@@ -37,8 +34,7 @@
   - neic.nordforsk.org
 
 
-# Services and Firewall
-# =====================
+### Services and Firewall
 
 - service: name=httpd enabled=yes state=started
 - service: name=firewalld enabled=yes state=started
@@ -51,3 +47,10 @@
 - firewalld: service={{item}} state=enabled permanent=true
   notify: [reload firewalld]
   with_items: [http, https, dnat-https]
+
+
+### Automatic Updates
+
+- cron: name=pip_update cron_file=neicweb-ansible minute=37 hour=3 user=root
+        job="pip freeze --local | grep -v '^\-e' | cut -d = -f 1  |
+             xargs -n1 pip install -U"
