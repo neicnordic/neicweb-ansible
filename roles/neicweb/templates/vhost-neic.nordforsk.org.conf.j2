@@ -72,7 +72,7 @@
 
     WSGIProcessGroup neic.nordforsk.org
     WSGIDaemonProcess neic.nordforsk.org \
-	python-path={{github_uploader_source_dir}}:{{github_uploader_config_dir}}
+	python-path={{pip_site_packages}}:{{github_uploader_source_dir}}:{{github_uploader_config_dir}}
 
     WSGIScriptAlias /int/upload {{github_uploader_source_dir}}/github_uploader/wsgi.py
     <Directory "{{github_uploader_source_dir}}/github_uploader">
