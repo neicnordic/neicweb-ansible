@@ -54,3 +54,7 @@
 - cron: name=pip_update cron_file=neicweb-ansible minute=37 hour=3 user=root
         job="{{pip_virtualenv}}/bin/pip freeze --local | grep -v '^\-e' | cut -d = -f 1  |
              xargs -n1 pip install -U"
+
+- lineinfile: dest=/etc/aliases regexp='^root:' line='root{{':'}} {{mail_forward_root}}'
+  notify: [newaliases]
+  when: mail_forward_root is defined
