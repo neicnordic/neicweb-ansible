@@ -1,0 +1,9 @@
+- yum: name=postfix state=present
+
+- lineinfile: dest=/etc/postfix/main.cf regexp="^relayhost ="
+              line="relayhost = {{mail_relay}}"
+  notify: [reload postfix]
+
+- lineinfile: dest=/etc/aliases regexp='^root:' line='root{{':'}} {{mail_forward_root}}'
+  notify: [newaliases]
+  when: mail_forward_root is defined

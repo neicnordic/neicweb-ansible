@@ -1,6 +1,7 @@
 jekyll_version: 2.5.3
 django_version: 1.8.4
 
+mail_relay: smtp.nbi.ku.dk
 mail_forward_root: neicweb-admins@ndgf.org
 
 pip_virtualenv: /opt/python

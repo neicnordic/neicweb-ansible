@@ -1,2 +1,2 @@
 - hosts: [neicweb]
-  roles: [neicweb]
+  roles: [mail-relay, neicweb]
