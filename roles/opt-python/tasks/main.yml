@@ -1,0 +1,8 @@
+### Automatic Updates
+
+- cron: name=pip_update cron_file=neicweb-ansible minute=37 hour=3 user=root
+        job="{{pip_virtualenv}}/bin/pip freeze --local | grep -v '^\-e' | cut -d = -f 1  |
+             xargs -n1 {{pip_command}} install -q --log {{pip_update_log}} -U"
+
+- template: dest=/etc/logrotate.d/pip-update src=pip-update.logrotate.j2
+            owner=root group=root mode=644
