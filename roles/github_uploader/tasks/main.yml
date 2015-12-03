@@ -36,11 +36,11 @@
 ### Static Directories and Templates
 
 - file: dest={{item.media_root}}
-        state=directory owner=apache group=apache mode=644
+        state=directory owner=apache group=apache mode=755
   with_items: github_uploader_instances.values()
 
 - file: dest={{item}}
-        state=directory owner=root group=root mode=644
+        state=directory owner=root group=root mode=755
   with_items: github_uploader_template_dirs + github_uploader_staticfiles_dirs
 
 - command: env PYTHONPATH={{pip_site_packages}}:{{github_uploader_config_dir}}
