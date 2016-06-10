@@ -1,0 +1,3 @@
+[submodule "external/jekyllweb_updater"]
+	path = external/jekyllweb_updater
+	url = neic@neicgit.nsc.liu.se:joel/jekyllweb_updater.git

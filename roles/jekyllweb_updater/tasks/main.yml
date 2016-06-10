@@ -23,11 +23,6 @@
 
 ### Our Software
 
-- stat: path=external/jekyllweb_updater
-  register: judir
-- fail: msg="Please check out neic@neicgit.nsc.liu.se:joel/jekyllweb_updater.git under external."
-  when: not (judir.stat.isdir is defined && judir.stat.isdir)
-
 - copy: dest={{jekyllweb_updater_program}}
         src=external/jekyllweb_updater/jekyllweb_updater.py
         owner=root group=root mode=755
