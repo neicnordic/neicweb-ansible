@@ -69,10 +69,12 @@
 - template: dest=/etc/jekyllweb_updater.conf src=jekyllweb_updater.conf.j2
             owner=root group=root mode=644
 
-- template: dest=/usr/lib/systemd/system/jekyllweb_updater_{{item[0]}}.service
+- template: dest=/usr/lib/systemd/system/jekyllweb_updater_{{item}}.service
             src=jekyllweb_updater.service.j2
             owner=root group=root mode=644
-  with_items: neicweb_sites.items()
+  vars:
+    - site: "{{neicweb_sites[item]}}"
+  with_items: neicweb_sites.keys()
   notify: [reload systemd]
 
 - service: name=jekyllweb_updater_{{item}} state=running enabled=yes
