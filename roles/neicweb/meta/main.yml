@@ -1,4 +1,3 @@
 ---
 dependencies:
   - {role: jekyllweb_updater}
-  - {role: github_uploader}

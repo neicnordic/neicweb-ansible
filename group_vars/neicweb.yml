@@ -37,39 +37,3 @@ neicweb_sites:
     cgi_key: neicnordic-ahm16
     git_fetch_url: https://github.com/neicnordic/ahm16.git
 jekyllweb_updater_trusted_repo: https://github.com/neicnordic/neicweb-extensions.git
-
-# Uploader
-#
-github_uploader_source_dir: /opt/github_uploader
-github_uploader_static_dir: /var/www/github_uploader/static
-github_uploader_media_dir: /var/www/github_uploader/media
-github_uploader_config_dir: /etc/github_uploader
-github_uploader_data_dir: /var/lib/github_uploader
-github_uploader_allowed_hosts: ['neic.nordforsk.org', 'neic.nbi.dk']
-github_uploader_admins: (('Joel', 'joel@nsc.liu.se'),)
-github_uploader_template_dirs: ['/var/www/github_uploader/reskin/templates']
-github_uploader_staticfiles_dirs: ['/var/www/github_uploader/reskin/static']
-
-github_uploader_instances:
-  neicweb:
-    full_name: neicnordic/neicweb
-    description: "NeIC official website"
-    media_root: "{{neicweb_top_dir}}/neicweb-media"
-    media_url: https://neic.nordforsk.org/media/
-  neicweb-devel:
-    full_name: neicnordic/neicweb-devel
-    description: "Sandbox for NeIC website development"
-    media_root: "{{neicweb_top_dir}}/neicweb-devel-media"
-    media_url: https://devel.neic.nordforsk.org/media/
-  ahm16:
-    full_name: neicnordic/ahm16
-    description: "NeIC all-hands meeting 2016"
-    media_root: "{{neicweb_top_dir}}/ahm16-media"
-    media_url: https://ahm16.neic.nordforsk.org/media/
-#  nscweb:
-#    full_name: snic-nsc/nscweb
-#    description: "NSC official website"
-#    hidden: True,
-#    path: assets/img
-#    scope: repo
-#    media_url: https://www.nsc.liu.se/assets/img/
