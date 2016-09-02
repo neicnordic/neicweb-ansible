@@ -7,7 +7,8 @@
 
 ### Software
 
-- yum: name={{item}} state=present
+- name: Install system packages
+  yum: name={{item}} state=present
   with_items:
     - httpd
     - mod_ssl
@@ -19,16 +20,20 @@
 
 ### Configure httpd
 
-- file: dest=/etc/httpd/conf.d/welcome.conf state=absent
-- file: dest=/etc/httpd/conf.d/userdir.conf state=absent
+- name: Remove default httpd content
+  file: dest=/etc/httpd/conf.d/{{item}} state=absent
+  with_items: [welcome.conf, userdir.conf]
 
-- file: dest=/var/log/httpd/{{item.vhost}} state=directory
+- name: Create httpd log directories
+  file: dest=/var/log/httpd/{{item.vhost}} state=directory
         owner=root group=root mode=644
   with_items: neicweb_sites.values()
 
-- template: dest=/etc/httpd/conf.d/vhost-{{item}}.conf
-            src=vhost-{{item}}.conf.j2
-            owner=root group=root mode=644
+- name: Install httpd configuration
+  template:
+    dest=/etc/httpd/conf.d/vhost-{{item}}.conf
+    src=vhost-{{item}}.conf.j2
+    owner=root group=root mode=644
   notify: [reload httpd]
   with_items:
   - neic.nordforsk.org
@@ -36,14 +41,18 @@
 
 ### Services and Firewall
 
-- service: name=httpd enabled=yes state=started
-- service: name=firewalld enabled=yes state=started
+- name: Enable httpd and firewalld services
+  service: name={{item}} enabled=yes state=started
+  with_items: [httpd, firewalld]
 
-- copy: dest=/etc/firewalld/services/dnat-https.xml src=dnat-https.xml
-        owner=root group=root mode=644
+- name: Add dnat-http services to firewalld
+  copy:
+    dest=/etc/firewalld/services/dnat-https.xml src=dnat-https.xml
+    owner=root group=root mode=644
   notify: [restart firewalld]
 - meta: flush_handlers
 
-- firewalld: service={{item}} state=enabled permanent=true
+- name: Open web services in firewalld
+  firewalld: service={{item}} state=enabled permanent=true
   notify: [reload firewalld]
   with_items: [http, https, dnat-https]

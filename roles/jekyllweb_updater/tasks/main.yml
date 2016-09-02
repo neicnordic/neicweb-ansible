@@ -1,6 +1,7 @@
 ### System Software
 
-- yum: name={{item}} state=present
+- name: Install OS packages for Jekyll
+  yum: name={{item}} state=present
   with_items:
     - epel-release
     - gcc
@@ -13,33 +14,46 @@
     - rubygem-ffi
     - rubygem-safe_yaml
 
-- gem: user_install=no name={{item}} state=present
+- name: Install Ruby gems for Jekyll
+  gem: user_install=no name={{item}} state=present
   with_items:
     - redcarpet
     - RedCloth
     - pandoc-ruby
 
-- gem: user_install=no name=jekyll state=present version={{jekyll_version}}
+- name: Install Jekyll
+  gem: user_install=no name=jekyll state=present version={{jekyll_version}}
 
 ### Our Software
 
-- copy: dest={{jekyllweb_updater_program}}
-        src=external/jekyllweb_updater/jekyllweb_updater.py
-        owner=root group=root mode=755
+- name: Install jekyllweb_updater.py
+  copy:
+    dest={{jekyllweb_updater_program}}
+    src=external/jekyllweb_updater/jekyllweb_updater.py
+    owner=root group=root mode=755
 
-- copy: dest={{jekyllweb_updater_ssh_wrapper}}
-        src=external/jekyllweb_updater/github_ssh_wrapper.sh
-        owner=root group=root mode=755
+- name: Install jekyllweb_updater.sh
+  copy:
+    dest={{jekyllweb_updater_ssh_wrapper}}
+    src=external/jekyllweb_updater/github_ssh_wrapper.sh
+    owner=root group=root mode=755
 
-- file: dest={{neicweb_cgi_dir}} state=directory owner=root group=root mode=755
-- template: dest={{neicweb_cgi_dir}}/github-jekyll-update.{{item.cgi_key}}.cgi
-            src=github-jekyll-update.cgi.j2
-            owner=root group=root mode=755
+- name: Create the CGI root directory
+  file:
+    dest={{neicweb_cgi_dir}} state=directory
+    owner=root group=root mode=755
+
+- name: Install CGI scripts
+  template:
+    dest={{neicweb_cgi_dir}}/github-jekyll-update.{{item.cgi_key}}.cgi
+    src=github-jekyll-update.cgi.j2
+    owner=root group=root mode=755
   with_items: neicweb_sites.values()
 
 ### User
 
-- user: system=yes name={{jekyllweb_updater_user}}
+- name: Create privilege escalation user for the jekyllweb updater
+  user: system=yes name={{jekyllweb_updater_user}}
         comment="jekyllweb_updater daemon"
 
 ### Directories
@@ -66,10 +80,12 @@
 
 ### Configuration and Service
 
-- template: dest=/etc/jekyllweb_updater.conf src=jekyllweb_updater.conf.j2
+- name: Install /etc/jekyllweb_updater.conf
+  template: dest=/etc/jekyllweb_updater.conf src=jekyllweb_updater.conf.j2
             owner=root group=root mode=644
 
-- template: dest=/usr/lib/systemd/system/jekyllweb_updater_{{item}}.service
+- name: Install updater service files
+  template: dest=/usr/lib/systemd/system/jekyllweb_updater_{{item}}.service
             src=jekyllweb_updater.service.j2
             owner=root group=root mode=644
   vars:
@@ -77,5 +93,6 @@
   with_items: neicweb_sites.keys()
   notify: [reload systemd]
 
-- service: name=jekyllweb_updater_{{item}} state=running enabled=yes
+- name: Enable updater services
+  service: name=jekyllweb_updater_{{item}} state=running enabled=yes
   with_items: neicweb_sites.keys()
