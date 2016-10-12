@@ -58,23 +58,28 @@
 
 ### Directories
 
-- file: dest={{jekyllweb_updater_log_dir}} state=directory mode=750
+- name: Create directory {{jekyllweb_updater_log_dir}}
+  file: dest={{jekyllweb_updater_log_dir}} state=directory mode=750
         owner={{jekyllweb_updater_user}} group={{jekyllweb_updater_user}}
-- file: dest={{jekyllweb_updater_status_dir}} state=directory mode=755
+- name: Create directory {{jekyllweb_updater_status_dir}}
+  file: dest={{jekyllweb_updater_status_dir}} state=directory mode=755
         owner={{jekyllweb_updater_user}} group={{jekyllweb_updater_user}}
 
-- file: dest={{jekyllweb_updater_cache_dir}}/{{item[0]}}/{{item[1]}}
+- name: Create subdirectories under {{jekyllweb_updater_cache_dir}}
+  file: dest={{jekyllweb_updater_cache_dir}}/{{item[0]}}/{{item[1]}}
         state=directory
         owner={{jekyllweb_updater_user}} group={{jekyllweb_updater_user}} mode=750
   with_nested:
     - neicweb_sites.keys()
     - [build, plugins, utils]
 
-- file: dest={{item.webroot}}/html state=directory
+- name: Create html directories.
+  file: dest={{item.webroot}}/html state=directory
         owner={{jekyllweb_updater_user}} group=apache mode=750
   with_items: neicweb_sites.values()
 
-- git: dest={{jekyllweb_updater_trusted_cache_dir}}
+- name: Clone trusted content repo
+  git: dest={{jekyllweb_updater_trusted_cache_dir}}
        repo={{jekyllweb_updater_trusted_repo}}
   when: jekyllweb_updater_trusted_repo is defined
 
