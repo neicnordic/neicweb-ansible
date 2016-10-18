@@ -24,9 +24,15 @@
   file: dest=/etc/httpd/conf.d/{{item}} state=absent
   with_items: [welcome.conf, userdir.conf]
 
+- name: Create /etc/httpd/conf.d/vhost-neic.nordforsk.org.d/
+  file:
+    dest=/etc/httpd/conf.d/vhost-neic.nordforsk.org.d/ state=directory
+    owner=root group=root mode=755
+
 - name: Create httpd log directories
-  file: dest=/var/log/httpd/{{item.vhost}} state=directory
-        owner=root group=root mode=644
+  file:
+    dest=/var/log/httpd/{{item.vhost}} state=directory
+    owner=root group=root mode=644
   with_items: neicweb_sites.values()
 
 - name: Install httpd configuration

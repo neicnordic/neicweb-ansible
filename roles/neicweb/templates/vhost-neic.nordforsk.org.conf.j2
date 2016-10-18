@@ -78,6 +78,8 @@
 	Header set Access-Control-Allow-Origin "https://wiki.neic.no"
     </Location>
 
+    IncludeOptional conf.d/vhost-neic.nordforsk.org.d/*.conf
+
 </VirtualHost>
 
 {% for r in neicweb_sites.values() %}
