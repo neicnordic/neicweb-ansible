@@ -1,2 +1,5 @@
 - hosts: [neicweb]
-  roles: [mail-relay, neicweb]
+  roles:
+    - mail-relay
+    - neicweb
+    - calendar-email-digest

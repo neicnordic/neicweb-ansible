@@ -1,0 +1,29 @@
+- name: Clone calendar-email-digest repository
+  git:
+    dest={{calendar_email_digest_srcdir}}
+    repo=https://github.com/neicnordic/calendar-email-digest.git
+
+- name: Install /etc/httpd/conf.d/vhost-neic.nordforsk.org.d/calendar-email-digest.conf
+  template:
+    dest=/etc/httpd/conf.d/vhost-neic.nordforsk.org.d/calendar-email-digest.conf
+    src=httpd-calendar-email-digest.conf
+    owner=root group=root mode=644
+  notify: [reload httpd]
+
+- name: Generate /etc/calendar_email_digest.conf
+  template:
+    dest=/etc/calendar-email-digest.conf
+    src=calendar-email-digest.conf
+    owner=root group=apache mode=640
+
+- name: Create /var/www/neic.nordforsk.org/wsgi-bin
+  file:
+    dest=/var/www/neic.nordforsk.org/wsgi-bin
+    state=directory
+    owner=root group=root mode=755
+
+- name: Generate /var/www/neic.nordforsk.org/wsgi-bin/calendar-email-digest.wsgi
+  template:
+    dest=/var/www/neic.nordforsk.org/wsgi-bin/calendar-email-digest.wsgi
+    src=calendar-email-digest.wsgi
+    owner=root group=root mode=644
