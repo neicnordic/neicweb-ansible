@@ -27,3 +27,11 @@
     dest=/var/www/neic.nordforsk.org/wsgi-bin/calendar-email-digest.wsgi
     src=calendar-email-digest.wsgi
     owner=root group=root mode=644
+
+- name: Install crontab entry
+  cron:
+    name=calendar-email-digest
+    hour=0 minute=0
+    state=present user=apache
+    job="{{calendar_email_digest_srcdir}}/src/calendar_email_digest.py --section neic-training"
+  when: primary is defined
