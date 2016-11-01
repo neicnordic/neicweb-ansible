@@ -31,7 +31,7 @@
 - name: Install crontab entry
   cron:
     name=calendar-email-digest
-    hour=0 minute=0
+    hour=11 minute=0 weekday=4
     state=present user=apache
     job="{{calendar_email_digest_srcdir}}/src/calendar_email_digest.py --section neic-training"
   when: primary is defined
