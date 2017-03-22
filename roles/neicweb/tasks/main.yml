@@ -23,9 +23,9 @@
 
 - name: Create httpd log directories
   file:
-    dest=/var/log/httpd/{{item.vhost}} state=directory
+    dest=/var/log/httpd/{{item.value.vhost}} state=directory
     owner=root group=root mode=644
-  with_items: neicweb_sites.values()
+  with_dict: "{{neicweb_sites}}"
 
 - name: Install httpd configuration
   template:

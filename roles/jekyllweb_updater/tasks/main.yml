@@ -45,10 +45,11 @@
 
 - name: Install CGI scripts
   template:
-    dest={{neicweb_cgi_dir}}/github-jekyll-update.{{item.cgi_key}}.cgi
+    dest={{neicweb_cgi_dir}}/github-jekyll-update.{{item.value.cgi_key}}.cgi
     src=github-jekyll-update.cgi.j2
     owner=root group=root mode=755
-  with_items: neicweb_sites.values()
+  vars: {site: "{{item.value}}"}
+  with_dict: "{{neicweb_sites}}"
 
 ### User
 
@@ -66,17 +67,17 @@
         owner={{jekyllweb_updater_user}} group={{jekyllweb_updater_user}}
 
 - name: Create subdirectories under {{jekyllweb_updater_cache_dir}}
-  file: dest={{jekyllweb_updater_cache_dir}}/{{item[0]}}/{{item[1]}}
+  file: dest={{jekyllweb_updater_cache_dir}}/{{item.0}}/{{item.1}}
         state=directory
         owner={{jekyllweb_updater_user}} group={{jekyllweb_updater_user}} mode=750
   with_nested:
-    - neicweb_sites.keys()
+    - "{{neicweb_sites}}"
     - [build, plugins, utils]
 
 - name: Create html directories.
-  file: dest={{item.webroot}}/html state=directory
+  file: dest={{item.value.webroot}}/html state=directory
         owner={{jekyllweb_updater_user}} group=apache mode=750
-  with_items: neicweb_sites.values()
+  with_dict: "{{neicweb_sites}}"
 
 - name: Clone trusted content repo
   git: dest={{jekyllweb_updater_trusted_cache_dir}}
@@ -90,14 +91,13 @@
             owner=root group=root mode=644
 
 - name: Install updater service files
-  template: dest=/usr/lib/systemd/system/jekyllweb_updater_{{item}}.service
+  template: dest=/usr/lib/systemd/system/jekyllweb_updater_{{item.key}}.service
             src=jekyllweb_updater.service.j2
             owner=root group=root mode=644
-  vars:
-    - site: "{{neicweb_sites[item]}}"
-  with_items: neicweb_sites.keys()
+  vars: {site: "{{item.value}}"}
+  with_dict: "{{neicweb_sites}}"
   notify: [reload systemd]
 
 - name: Enable updater services
-  service: name=jekyllweb_updater_{{item}} state=running enabled=yes
-  with_items: neicweb_sites.keys()
+  service: name=jekyllweb_updater_{{item.key}} state=running enabled=yes
+  with_dict: "{{neicweb_sites}}"
