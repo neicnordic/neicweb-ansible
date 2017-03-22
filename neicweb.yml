@@ -1,5 +1,4 @@
 - hosts: [neicweb]
   roles:
-    - {role: mail-relay, tag: mail-relay}
     - {role: neicweb, tag: neicweb}
     - {role: calendar-email-digest, tag: calendar-email-digest}
