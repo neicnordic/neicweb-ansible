@@ -7,6 +7,12 @@
     Redirect permanent / https://neic.nordforsk.org/
 </VirtualHost>
 
+<VirtualHost *:80>
+    ServerName www.ndgf.org
+    DocumentRoot /var/www/html
+    Redirect permanent / https://neic.nordforsk.org/activities/nt1/
+</VirtualHost>
+
 <VirtualHost {{ansible_default_ipv4.address}}:443>
     ServerName neic.nordforsk.org
     ServerAlias neic.nbi.dk
