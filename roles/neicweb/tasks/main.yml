@@ -36,6 +36,11 @@
   with_items:
   - neic.nordforsk.org
 
+- name: Create /var/www/html/.well-known
+  file:
+    dest=/var/www/html/.well-known
+    state=directory owner=root group=root mode=755
+
 
 ### Services and Firewall
 

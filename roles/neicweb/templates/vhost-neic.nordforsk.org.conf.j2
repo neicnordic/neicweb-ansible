@@ -1,10 +1,20 @@
 # {{ansible_managed}}
 
 <VirtualHost *:80>
-    ServerName neic.nordforsk.org
+    ServerName neic.no
+    ServerAlias www.neic.no
+    ServerAlias neic.nordforsk.org
     ServerAlias neic.nbi.dk
     DocumentRoot /var/www/html
-    Redirect permanent / https://neic.nordforsk.org/
+
+    RewriteEngine on
+    RewriteCond %{REQUEST_URI} !^/.well-known(/.*)?$
+    RewriteRule ^(/.*)?$ https://neic.nordforsk.org$1 [R]
+
+    Alias /.well-known /var/www/html/.well-known
+    <Directory /var/www/html/.well-known>
+	Require all granted
+    </Directory>
 </VirtualHost>
 
 <VirtualHost *:80>
