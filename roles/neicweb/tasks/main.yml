@@ -16,10 +16,13 @@
   file: dest=/etc/httpd/conf.d/{{item}} state=absent
   with_items: [welcome.conf, userdir.conf]
 
-- name: Create /etc/httpd/conf.d/vhost-neic.nordforsk.org.d/
+- name: Create directories for site includes
   file:
-    dest=/etc/httpd/conf.d/vhost-neic.nordforsk.org.d/ state=directory
+    dest=/etc/httpd/conf.d/vhost-{{item}}.d/ state=directory
     owner=root group=root mode=755
+  with_items:
+    - neic.no
+    - neic.nordforsk.org
 
 - name: Create httpd log directories
   file:
