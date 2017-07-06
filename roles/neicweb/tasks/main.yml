@@ -39,8 +39,9 @@
     dest=/etc/httpd/conf.d/vhost-{{item.domain}}.conf
     src=vhost-{{item.domain}}.conf
     owner=root group=root mode=644
-  notify: [reload httpd]
+  vars: {vhost: "{{item}}"}
   with_items: "{{neicweb_vhosts}}"
+  notify: [reload httpd]
 
 - name: Create /var/www/html/.well-known
   file:
