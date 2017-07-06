@@ -106,5 +106,5 @@
   notify: [reload systemd]
 
 - name: Enable updater services
-  service: name=jekyllweb_updater_{{item.key}} state=running enabled=yes
+  service: name=jekyllweb_updater_{{item.key}} state=started enabled=yes
   with_dict: "{{neicweb_sites}}"
