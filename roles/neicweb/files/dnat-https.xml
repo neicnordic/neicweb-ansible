@@ -2,7 +2,7 @@
 <service>
   <short>DNATed Secure WWW (HTTPS)</short>
   <description>
-    Port range used at NBI for HTTPS sites with DNATed IP numbers.
+    Port range used as DNAT target for HTTPS.
   </description>
-  <port protocol="tcp" port="44300-44399"/>
+  <port protocol="tcp" port="44000-44399"/>
 </service>
