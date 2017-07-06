@@ -1,13 +1,13 @@
-jekyll_version: 2.5.3
-django_version: 1.8.4
-
 mail_relay: smtp.nbi.ku.dk
 mail_forward_root: neicweb-admins@ndgf.org
 
+# ----BEGIN---- soon obsolete
+
+jekyll_version: 2.5.3
+django_version: 1.8.4
+
 pip_virtualenv: /opt/python
 pip_site_packages: "{{pip_virtualenv}}/lib/python2.7/site-packages"
-
-neicweb_production: true
 
 # Access for triggering update.
 neicweb_jekyll_update_allow:
@@ -37,3 +37,5 @@ neicweb_sites:
     cgi_key: neicnordic-ahm16
     git_fetch_url: https://github.com/neicnordic/ahm16.git
 jekyllweb_updater_trusted_repo: https://github.com/neicnordic/neicweb-extensions.git
+
+# ----END---- soon obsolete
