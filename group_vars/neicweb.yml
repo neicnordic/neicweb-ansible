@@ -1,6 +1,10 @@
 mail_relay: smtp.nbi.ku.dk
 mail_forward_root: neicweb-admins@ndgf.org
 
+neicweb_vhosts:
+  - {domain: neic.no, listen: "172.31.72.8:443"}
+  - {domain: neic.nordforsk.org, listen: "172.31.72.8:443"}
+
 # ----BEGIN---- soon obsolete
 
 jekyll_version: 2.5.3
