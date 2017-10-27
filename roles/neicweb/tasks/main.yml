@@ -35,6 +35,7 @@
   with_items: "{{neicweb_vhosts}}"
 
 - name: Install httpd configuration
+  tags: [vhosts]
   template:
     dest=/etc/httpd/conf.d/vhost-{{item.domain}}.conf
     src=vhost-{{item.domain}}.conf
