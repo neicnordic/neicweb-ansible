@@ -3,9 +3,9 @@
     dest={{calendar_email_digest_srcdir}}
     repo=https://github.com/neicnordic/calendar-email-digest.git
 
-- name: Install /etc/httpd/conf.d/vhost-neic.nordforsk.org.d/calendar-email-digest.conf
+- name: Install /etc/httpd/conf.d/vhost-neic.no.d/calendar-email-digest.conf
   template:
-    dest=/etc/httpd/conf.d/vhost-neic.nordforsk.org.d/calendar-email-digest.conf
+    dest=/etc/httpd/conf.d/vhost-neic.no.d/calendar-email-digest.conf
     src=httpd-calendar-email-digest.conf
     owner=root group=root mode=644
   notify: [reload httpd]
@@ -16,15 +16,15 @@
     src=calendar-email-digest.conf
     owner=root group=apache mode=640
 
-- name: Create /var/www/neic.nordforsk.org/wsgi-bin
+- name: Create /var/www/neic.no/wsgi-bin
   file:
-    dest=/var/www/neic.nordforsk.org/wsgi-bin
+    dest=/var/www/neic.no/wsgi-bin
     state=directory
     owner=root group=root mode=755
 
-- name: Generate /var/www/neic.nordforsk.org/wsgi-bin/calendar-email-digest.wsgi
+- name: Generate /var/www/neic.no/wsgi-bin/calendar-email-digest.wsgi
   template:
-    dest=/var/www/neic.nordforsk.org/wsgi-bin/calendar-email-digest.wsgi
+    dest=/var/www/neic.no/wsgi-bin/calendar-email-digest.wsgi
     src=calendar-email-digest.wsgi
     owner=root group=root mode=644
 
