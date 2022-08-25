@@ -1,2 +1,0 @@
-pip_command: "{{pip_virtualenv}}/bin/pip"
-pip_update_log: /var/log/pip-update.log

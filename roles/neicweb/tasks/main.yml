@@ -5,9 +5,6 @@
   with_items:
     - httpd
     - mod_ssl
-    - mod_wsgi
-    - nodejs
-    - PyYAML
 
 
 ### Configure httpd
