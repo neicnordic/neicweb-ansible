@@ -1,66 +1,83 @@
 ### Software
 
 - name: Install system packages
-  yum: name={{item}} state=present
-  with_items:
-    - httpd
-    - mod_ssl
+  package:
+    state: present
+    name:
+      - httpd
+      - mod_ssl
 
 
 ### Configure httpd
 
 - name: Remove default httpd content
-  file: dest=/etc/httpd/conf.d/{{item}} state=absent
-  with_items: [welcome.conf, userdir.conf]
+  file:
+    dest: "/etc/httpd/conf.d/{{ item }}"
+    state: absent
+  loop: [welcome.conf, userdir.conf]
 
 - name: Create directories for site includes
   file:
-    dest=/etc/httpd/conf.d/vhost-{{item.domain}}.d/ state=directory
-    owner=root group=root mode=755
-  with_items: "{{neicweb_vhosts}}"
-
-#- name: Create httpd log directories
-#  file:
-#    dest=/var/log/httpd/{{item.value.vhost}} state=directory
-#    owner=root group=root mode=700
-#  with_dict: "{{neicweb_sites}}"
+    dest: "/etc/httpd/conf.d/vhost-{{ item.domain }}.d/"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  loop: "{{ neicweb_vhosts }}"
 
 - name: Create httpd log directories
   file:
-    dest=/var/log/httpd/{{item.domain}} state=directory
-    owner=root group=root mode=700
-  with_items: "{{neicweb_vhosts}}"
+    dest: /var/log/httpd/{{item.domain}}
+    state: directory
+    owner: root
+    group: root
+    mode: 0700
+  loop: "{{ neicweb_vhosts }}"
 
 - name: Install httpd configuration
   tags: [vhosts]
   template:
-    dest=/etc/httpd/conf.d/vhost-{{item.domain}}.conf
-    src=vhost-{{item.domain}}.conf
-    owner=root group=root mode=644
+    dest: "/etc/httpd/conf.d/vhost-{{ item.domain }}.conf"
+    src: "vhost-{{ item.domain }}.conf"
+    owner: root
+    group: root
+    mode: 0644
   vars: {vhost: "{{item}}"}
-  with_items: "{{neicweb_vhosts}}"
+  loop: "{{neicweb_vhosts}}"
   notify: [reload httpd]
 
 - name: Create /var/www/html/.well-known
   file:
-    dest=/var/www/html/.well-known
-    state=directory owner=root group=root mode=755
+    dest: /var/www/html/.well-known
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
 
 
 ### Services and Firewall
 
 - name: Enable httpd and firewalld services
-  service: name={{item}} enabled=yes state=started
-  with_items: [httpd, firewalld]
+  service:
+    name: "{{ item }}"
+    enabled: yes
+    state: started
+  loop: [httpd, firewalld]
 
 - name: Add dnat-http services to firewalld
   copy:
-    dest=/etc/firewalld/services/dnat-https.xml src=dnat-https.xml
-    owner=root group=root mode=644
+    dest: /etc/firewalld/services/dnat-https.xml
+    src: dnat-https.xml
+    owner: root
+    group: root
+    mode: 0644
   notify: [restart firewalld]
 - meta: flush_handlers
 
 - name: Open web services in firewalld
-  firewalld: service={{item}} state=enabled permanent=true
+  firewalld:
+    service: "{{item}}"
+    state: enabled
+    permanent: true
   notify: [reload firewalld]
-  with_items: [http, https, dnat-https]
+  loop: [http, https, dnat-https]
