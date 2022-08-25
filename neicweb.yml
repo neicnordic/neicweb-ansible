@@ -1,4 +1,3 @@
 - hosts: [neicweb]
   roles:
     - {role: neicweb, tags: [neicweb]}
-    - {role: calendar-email-digest, tags: [calendar-email-digest]}
